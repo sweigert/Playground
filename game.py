@@ -21,8 +21,8 @@ class Ant:
         self.mutations = 0
     
     def __mutate(self):
-        # there is a 1% chance we mutate our rule
-        if (random.random() > 0.99):
+        # there is no chance for mutation
+        if (random.random() > 1):
             idx = random.randint(0, (len(self.rule) - 1))
             newRule = random.sample((L,R,N,S), 1)[0]
             self.rule[idx] = newRule
@@ -68,12 +68,24 @@ def maybe(value, alt = 0):
 
 
 def main():
-    worldSize = 600
-    size = 1
-    dims = worldSize / size
-    rule = [L,R,R,L]*256
+    worldSize = 1024
+    size = 10
+    dims = int(worldSize / size)
+
+    rule = [L,R]
+    ## grows symmetrically, can't work together
+    # rule = [L,L,R,R]
+    ## grows chaotically, unknown emergent behavior
+    # rule = [R,L,R]
+    ## fills space in a square around itself, can work together
+    # rule = [L,R,R,R,R,R,L,L,R]
+    ## creates convoluted highway
+    # rule = [L,L,R,R,R,L,R,L,R,L,L,R]
+    ## creates a filled triangle shape that grows and moves
+    # rule = [R,R,L,L,L,R,L,L,L,R,R,R]
+    
     HSV = [(float(x)/len(rule), 0.5, 0.5) for x in range(len(rule))]
-    colors = map(lambda x: reformat(colorsys.hsv_to_rgb(*x)), HSV)
+    colors = list(map(lambda x: reformat(colorsys.hsv_to_rgb(*x)), HSV))
 
     # init pygame
     pygame.init()
@@ -116,16 +128,11 @@ def main():
                 if (iteration % 1000 == 0):
                     pygame.image.save(screen, ("screen%010d.jpg" % iteration))
                 
-        # if len(ants) > 1:
-        #     for idx1, ant in enumerate(ants):
-        #         for idx2, ant2 in enumerate(ants):
-        #             if ant != ant2 and ant.gridpos == ant2.gridpos:
-        #                 print("%d, %d" % (idx1, idx2))
-
         # first, apply rules to all ants without changing the board
         dying = []
         for ant in ants:
             ant.applyRule(board[ant.gridpos])
+            # ants die if mutated to often
             if ant.mutations > round(len(ant.rule)/8):
                 dying.append(ant)
 
@@ -150,7 +157,7 @@ def main():
         # update screen
         background.blit(screen, (0, 0))
         pygame.display.update()
-        clock.tick(30)
+        #clock.tick(30)
 
         iteration += 1
 
