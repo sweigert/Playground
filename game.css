@@ -1,5 +1,15 @@
 canvas {
     background-color: black; 
     width: 100%;
-    height: auto;
+    height: 500;
+    display: block;
   }
+
+.logo td
+{
+    padding:0 2px 0 2px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+body {background-color: #464646;}

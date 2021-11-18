@@ -7,8 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
   <title>Langton</title>
 
@@ -16,51 +16,119 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="row">
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Random rule length" aria-label="Length" aria-describedby="randInitBtn" ,
-              id="ruleLength" value=256>
-            <div class="input-group-append">
-              <button class="btn btn-primary" type="button" id="randInitBtn" onclick="genRule();">Generate</button>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Rule" aria-label="Rule" aria-describedby="initBtn" ,
-              id="rule">
-            <div class="input-group-append">
-              <button class="btn btn-primary" type="button" id="initBtn" onclick="init();">Run</button>
-            </div>
-            <div class="input-group-append">
-              <button class="btn btn-primary" type="button" id="addBtn" onclick="addAnt();">Add</button>
-            </div>
-          </div>
-        </div>
+  <div class="bg-dark text-white">
+    <h2>
+      <div class="container">
+        <table class=logo>
+          <tr>
+            <td></td>
+            <td>N</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>E</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><i>A</i></td>
+            <td><i>R</i></td>
+            <td><i>T</i></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>D</td>
+            <td></td>
+          </tr>
+        </table>
       </div>
-      <div class="overflow-auto">
-        <canvas id="gol" width=800 height=800"></canvas>
+    </h2>
+  </div>
+
+  <br />
+
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="btn-toolbar mb-3 mx-3" role="toolbar" aria-label="Rule toolbar">
+        <div class="input-group mr-2">
+          <input type="text" class="form-control" placeholder="Random rule length" aria-label="Length"
+            aria-describedby="randInitBtn" , id="ruleLength" value=8>
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="button" id="randInitBtn" onclick="genRule();">Generate</button>
+          </div>
+        </div>
+        <div class="input-group mr-2">
+          <input type="text" class="form-control" placeholder="Rule" aria-label="Rule" , id="rule">
+        </div>
       </div>
     </div>
   </div>
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="btn-toolbar mb-3 mx-3" role="toolbar" aria-label="Controls">
+        <div class="btn-group mr-2" role="group" aria-label="Controls">
+          <button class="btn btn-primary" type="button" id="initBtn" onclick="init();">Start</button>
+          <button class="btn btn-primary" type="button" id="stopBtn" onclick="stop();">Stop</button>
+        </div>
+        <div class="btn-group mr-2" role="group" aria-label="Controls">
+          <div class="input-group">
+            <select class="custom-select" id="antCntChooser" aria-label="Select how many ants to add">
+              <option selected value="1">1</option>
+              <option value="10">10</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="button" id="addBtn" onclick="addAntClicked();">Add</button>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mr-2" role="group" aria-label="Controls">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="paletteChooser">Color Theme</label>
+          </div>
+          <select class="custom-select mr-sm-2" id="paletteChooser">
+            <option selected value="grayscale">Grayscale</option>
+            <option selected value="spectral">Spectral</option>
+            <option selected value="BrBG">BrBG</option>
+            <option selected value="PiYG">PiYG</option>
+            <option selected value="PRGn">PRGn</option>
+            <option selected value="PuOr">PuOr</option>
+            <option selected value="RdBu">RdBu</option>
+            <option selected value="RdGy">RdGy</option>
+            <option selected value="RdYlBu">RdYlBu</option>
+            <option selected value="RdYlGn">RdYlGn</option>
+            <option value="YlGnBu">YlGnBu</option>
+            <option value="BuGn">BuGn</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-5">
+      <canvas class="mb-3 mx-3" id="canvas" width="500" height="500">
+        Sorry, your browser doesn't support the &lt;canvas&gt; element.
+      </canvas>
+    </div>
+  </div>
 
-
-  <script src="https://cdn.jsdelivr.net/npm/google-palette@1.1.0/palette.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.1.0/chroma.min.js"
+    integrity="sha512-yocoLferfPbcwpCMr8v/B0AB4SWpJlouBwgE0D3ZHaiP1nuu5djZclFEIj9znuqghaZ3tdCMRrreLoM8km+jIQ=="
+    crossorigin="anonymous"></script>
   <script src="langton.js"></script>
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
     crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
+</body>
 </body>
 
 </html>
